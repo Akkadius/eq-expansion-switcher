@@ -21,8 +21,6 @@ func Save(config Config) error {
 		return err
 	}
 
-	fmt.Println(string(yamlData))
-
 	f, err := os.Create(configFileName)
 	if err != nil {
 		return err
