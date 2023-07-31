@@ -69,6 +69,8 @@
                 Patch - Total Files ({{ totalFilesCopyCount(filesToCopy) }})
               </button>
 
+              <span class="text-muted"> Files get patched in order of expansion</span>
+
               <eq-tabs
                   :selected="filesToCopy[0].name"
                   :key="now"
