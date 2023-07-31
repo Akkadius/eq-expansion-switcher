@@ -63,7 +63,7 @@
             <div class="col-12">
               <button
                   class='eq-button'
-                  onclick="alert('click')"
+                  @click="patchFiles()"
                   style="display: inline-block; margin: 0 0 10px;"
               >
                 Patch - Total Files ({{ totalFilesCopyCount(filesToCopy) }})
@@ -138,9 +138,9 @@
 
 <script>
 import {EXPANSIONS_FULL}                                     from "./expansions/eq-expansions.ts";
-import EqWindow                                              from "./components/eq-ui/EQWindow.vue";
-import {GetConfig, GetExpansionFiles, OpenFileDialogueEqDir} from "../wailsjs/go/main/App.js";
-import EqTabs                                                from "./components/eq-ui/EQTabs.vue";
+import EqWindow                                                                      from "./components/eq-ui/EQWindow.vue";
+import {GetConfig, GetExpansionFiles, OpenFileDialogueEqDir, PatchFilesForExpansion} from "../wailsjs/go/main/App.js";
+import EqTabs                                                                        from "./components/eq-ui/EQTabs.vue";
 import EqTab                                                 from "./components/eq-ui/EQTab.vue";
 
 export default {
@@ -159,6 +159,11 @@ export default {
     this.getConfig()
   },
   methods: {
+    patchFiles() {
+      if (confirm('Are you sure you want to patch these files?')) {
+        PatchFilesForExpansion(parseInt(this.selectedExpansion))
+      }
+    },
     async getConfig() {
       const config = await GetConfig()
       if (!config) {

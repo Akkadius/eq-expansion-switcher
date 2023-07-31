@@ -17,3 +17,7 @@ export function Greet(arg1) {
 export function OpenFileDialogueEqDir() {
   return window['go']['main']['App']['OpenFileDialogueEqDir']();
 }
+
+export function PatchFilesForExpansion(arg1) {
+  return window['go']['main']['App']['PatchFilesForExpansion'](arg1);
+}

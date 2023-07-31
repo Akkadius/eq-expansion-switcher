@@ -10,3 +10,5 @@ export function GetExpansionFiles(arg1:string):Promise<Array<eqassets.ExpansionF
 export function Greet(arg1:string):Promise<string>;
 
 export function OpenFileDialogueEqDir():Promise<string>;
+
+export function PatchFilesForExpansion(arg1:number):Promise<void>;

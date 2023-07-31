@@ -2,11 +2,14 @@ package eqassets
 
 import (
 	"encoding/json"
+	"eq-expansion-switcher/internal/config"
 	"fmt"
 	"github.com/gosimple/slug"
+	cp "github.com/otiai10/copy"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 // EqAssets struct
@@ -99,4 +102,47 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 	fmt.Println(files)
 
 	return files
+}
+
+func (e *EqAssets) PatchFilesForExpansion(id int) {
+	config := config.Get()
+
+	for _, e := range e.GetExpansionFiles(strconv.Itoa(id)) {
+		fmt.Println("Patching files for expansion:", e.Expansion.Name)
+		for _, f := range e.Files {
+			fmt.Println("Patching file:", f)
+
+			newFile := strings.Split(f, string(filepath.Separator))
+			// remove first 2 elements from slice
+			newFile = append(newFile[:0], newFile[2:]...)
+
+			// copy file to eq dir
+			destination := filepath.Join(config.EqDir, strings.Join(newFile, string(filepath.Separator)))
+
+			basename := filepath.Base(destination)
+
+			fmt.Println("destination:", destination)
+			fmt.Println("basename:", basename)
+
+			if strings.Contains(basename, ".s3d") {
+				// check if file exists
+				eqg := strings.Replace(destination, ".s3d", ".eqg", 1)
+				if _, err := os.Stat(eqg); !os.IsNotExist(err) {
+					fmt.Println("Removing file:", eqg)
+
+					// remove file
+					err := os.Remove(eqg)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}
+			}
+
+			// copy source to destination
+			err := cp.Copy(f, destination)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
 }
