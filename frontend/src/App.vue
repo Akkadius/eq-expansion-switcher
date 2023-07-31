@@ -159,9 +159,10 @@ export default {
     this.getConfig()
   },
   methods: {
-    patchFiles() {
+    async patchFiles() {
       if (confirm('Are you sure you want to patch these files?')) {
-        PatchFilesForExpansion(parseInt(this.selectedExpansion))
+        await PatchFilesForExpansion(parseInt(this.selectedExpansion))
+        alert("Files patched successfully")
       }
     },
     async getConfig() {

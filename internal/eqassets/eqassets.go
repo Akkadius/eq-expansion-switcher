@@ -105,38 +105,44 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 }
 
 func (e *EqAssets) PatchFilesForExpansion(id int) {
-	config := config.Get()
+	c := config.Get()
 
 	for _, e := range e.GetExpansionFiles(strconv.Itoa(id)) {
+		fmt.Println("Checking for files to be deleted in expansion:", e.Expansion.Name)
+		for _, f := range e.Files {
+			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
+				newFile := strings.Split(f, string(filepath.Separator))
+				newFile = append(newFile[:0], newFile[2:]...)
+				base := strings.Join(newFile, string(filepath.Separator))
+				base = strings.ReplaceAll(base, ".s3d", "")
+				base = strings.ReplaceAll(base, ".eqg", "")
+				_ = filepath.Walk(c.EqDir, func(path string, info os.FileInfo, err error) error {
+					if info.IsDir() {
+						return nil
+					}
+
+					if strings.Contains(path, base) && !strings.Contains(path, "maps") {
+						fmt.Println("--- Removing file:", path)
+
+						// remove file
+						err := os.Remove(path)
+						if err != nil {
+							fmt.Println(err)
+						}
+					}
+
+					return nil
+				})
+			}
+		}
+
 		fmt.Println("Patching files for expansion:", e.Expansion.Name)
 		for _, f := range e.Files {
-			fmt.Println("Patching file:", f)
-
 			newFile := strings.Split(f, string(filepath.Separator))
-			// remove first 2 elements from slice
 			newFile = append(newFile[:0], newFile[2:]...)
+			destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
 
-			// copy file to eq dir
-			destination := filepath.Join(config.EqDir, strings.Join(newFile, string(filepath.Separator)))
-
-			basename := filepath.Base(destination)
-
-			fmt.Println("destination:", destination)
-			fmt.Println("basename:", basename)
-
-			if strings.Contains(basename, ".s3d") {
-				// check if file exists
-				eqg := strings.Replace(destination, ".s3d", ".eqg", 1)
-				if _, err := os.Stat(eqg); !os.IsNotExist(err) {
-					fmt.Println("Removing file:", eqg)
-
-					// remove file
-					err := os.Remove(eqg)
-					if err != nil {
-						fmt.Println(err)
-					}
-				}
-			}
+			fmt.Printf("--- Copying file %v to %v\n", f, destination)
 
 			// copy source to destination
 			err := cp.Copy(f, destination)
