@@ -23,6 +23,10 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    const index = this.$parent.tabs.indexOf(this);
+    this.$parent.tabs.splice(index, 1);
+  },
   mounted() {
     this.isActive = this.selected;
   },

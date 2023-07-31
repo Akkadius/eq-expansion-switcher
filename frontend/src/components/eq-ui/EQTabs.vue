@@ -38,11 +38,9 @@ export default {
         })
       }
     },
-    'tabs'() {
-        this.tabs.forEach(tab => {
-          tab.isActive = tab.name === this.selected;
-        })
-    },
+  },
+  beforeCreate() {
+    this.tabs = []
   },
   mounted() {
     if (this.selected && this.selected.length > 0) {

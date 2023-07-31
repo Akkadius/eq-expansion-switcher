@@ -69,38 +69,42 @@
                 Patch - Total Files ({{ totalFilesCopyCount(filesToCopy) }})
               </button>
 
-                <eq-tabs :selected="filesToCopy[0].name">
-                  <eq-tab
-                      v-for="(f, i) in filesToCopy"
-                      :key="f.expansion.id"
-                      :name="f.expansion.name + ' - Files (' + f.files.length + ')'"
-                      :selected="i === 0"
+              <eq-tabs
+                  :selected="filesToCopy[0].name"
+                  :key="now"
+                  v-if="now"
+              >
+                <eq-tab
+                    v-for="(f, i) in filesToCopy"
+                    :key="f.expansion.id + '-' + selectedExpansion"
+                    :name="f.expansion.name + ' (' + f.files.length + ')'"
+                    :selected="i === 0"
+                >
+                  <img
+                      :src="getExpansionImage(expansions[f.expansion.id])"
+                      style="width: 56px; "
                   >
-                    <img
-                        :src="getExpansionImage(expansions[f.expansion.id])"
-                        style="width: 56px; "
-                    >
-                    {{ f.expansion.name }}
+                  {{ f.expansion.name }}
 
-                    <table
-                        class="eq-table eq-highlight-rows mt-3"
-                        style="display: table; font-size: 14px; overflow-x: scroll "
-                        v-if="f.files && f.files.length > 0"
-                    >
-                      <thead>
-                      <tr>
-                        <th>File(s) ({{ f.files.length }})</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr v-for="file in f.files">
-                        <td>{{ file.split('/').slice(2).join('/') }}</td>
-                      </tr>
-                      </tbody>
-                    </table>
+                  <table
+                      class="eq-table eq-highlight-rows mt-3"
+                      style="display: table; font-size: 14px; overflow-x: scroll "
+                      v-if="f.files && f.files.length > 0"
+                  >
+                    <thead>
+                    <tr>
+                      <th>File(s) ({{ f.files.length }})</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="file in f.files">
+                      <td>{{ file.split('/').slice(2).join('/') }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
 
-                  </eq-tab>
-                </eq-tabs>
+                </eq-tab>
+              </eq-tabs>
             </div>
 
           </div>
@@ -146,6 +150,7 @@ export default {
       selectedExpansion: -1,
       filesToCopy: [],
       clientLocation: "",
+      now: Date.now()
     }
   },
   mounted() {
@@ -182,9 +187,9 @@ export default {
     async selectExpansion(expansionId) {
       this.selectedExpansion = expansionId
       const files            = await GetExpansionFiles(expansionId)
-      console.log('files', files)
       this.filesToCopy = files ? files : []
 
+      this.now = Date.now()
       // alert('Selected expansion: ' + expansion.name)
     },
     totalFilesCopyCount(filesToCopy) {
