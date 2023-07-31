@@ -45,8 +45,6 @@ export default {
     }
   },
   mounted() {
-
-    console.log("hello")
   },
   methods: {
     isExpansionSelected: function (expansionId) {
