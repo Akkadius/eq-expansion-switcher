@@ -1,3 +1,22 @@
+export namespace config {
+	
+	export class Config {
+	    eq_dir: string;
+	    current_expansion: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Config(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.eq_dir = source["eq_dir"];
+	        this.current_expansion = source["current_expansion"];
+	    }
+	}
+
+}
+
 export namespace eqassets {
 	
 	export class Expansion {

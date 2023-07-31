@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/gosimple/slug v1.13.1
 	github.com/wailsapp/wails/v2 v2.5.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

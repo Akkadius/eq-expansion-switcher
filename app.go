@@ -2,15 +2,19 @@ package main
 
 import (
 	"context"
+	"eq-expansion-switcher/internal/config"
 	"eq-expansion-switcher/internal/eqassets"
 	"fmt"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
+	"strconv"
 )
 
 // App struct
 type App struct {
 	ctx    context.Context
 	assets *eqassets.EqAssets
+	config config.Config
 }
 
 // NewApp creates a new App application struct
@@ -24,6 +28,7 @@ func NewApp() *App {
 	return &App{
 		ctx:    context.Background(),
 		assets: a,
+		config: config.Get(),
 	}
 }
 
@@ -40,7 +45,39 @@ func (a *App) Greet(name string) string {
 
 // GetExpansionFiles returns a greeting for the given name
 func (a *App) GetExpansionFiles(exansionId string) []eqassets.ExpansionFiles {
-	fmt.Printf("GetExpansionFiles %s\n", exansionId)
+	// Save the expansion to the config file
+	id, _ := strconv.Atoi(exansionId)
+	a.config.CurrentExpansion = id
+	err := config.Save(a.config)
+	if err != nil {
+		log.Println(err.Error())
+	}
 
 	return a.assets.GetExpansionFiles(exansionId)
+}
+
+func (a *App) OpenFileDialogueEqDir() string {
+	str, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title:           "Find EverQuest Directory",
+		ShowHiddenFiles: true,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Save the directory to the config file
+	a.config.EqDir = str
+	err = config.Save(a.config)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	fmt.Printf("OpenFileDialogueEqDir %s\n", str)
+	return str
+}
+
+func (a *App) GetConfig() config.Config {
+	fmt.Println(a.config)
+
+	return a.config
 }

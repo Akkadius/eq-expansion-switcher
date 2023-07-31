@@ -25,8 +25,6 @@
 </template>
 
 <script>
-import {LocalSettings} from "@/app/local-settings/localsettings";
-
 export default {
   name: 'EqTabs',
   data() {
@@ -40,9 +38,11 @@ export default {
         })
       }
     },
-  },
-  created() {
-    this.tabs = this.$children;
+    'tabs'() {
+        this.tabs.forEach(tab => {
+          tab.isActive = tab.name === this.selected;
+        })
+    },
   },
   mounted() {
     if (this.selected && this.selected.length > 0) {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     selectTabHover(selectedTab) {
-      if (this.hoverOpen || LocalSettings.isTabHoverEnabled()) {
+      if (this.hoverOpen) {
         this.selectTab(selectedTab)
       }
     },
