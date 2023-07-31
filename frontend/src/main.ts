@@ -4,4 +4,9 @@ import App from './App.vue'
 // EQ Assets - These should be moved into the assets themselves
 import '@/components/eq-ui/styles/eq-ui.css'
 
-createApp(App).mount('#app')
+import 'bootstrap/dist/css/bootstrap-grid.css'
+
+import '@/assets/global.css'
+
+const app = createApp(App)
+app.mount('#app')

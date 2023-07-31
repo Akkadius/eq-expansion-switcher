@@ -1,6 +1,11 @@
 <template>
   <div class='eq-window-simple'>
-    <div class='eq-window-title-bar' v-if="title">{{title}}</div>
+    <div
+        class='eq-window-title-bar'
+        v-if="title"
+        :style="titleDraggable ? '--wails-draggable:drag' : false"
+    >{{ title }}
+    </div>
     <div>
       <slot></slot>
     </div>
@@ -14,6 +19,11 @@ export default {
     title: {
       type: String,
       required: false
+    },
+    titleDraggable: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 }

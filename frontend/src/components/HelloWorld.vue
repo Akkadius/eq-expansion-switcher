@@ -1,21 +1,6 @@
-<template>
-  <main>
-    <div id="result" class="result">{{ data.resultText }}</div>
-    <div id="input" class="input-box">
-      <input id="name" v-model="data.name" autocomplete="off" class="input" type="text"/>
-      <button class="btn" @click="greet">Greet</button>
-    </div>
-
-    hello
-
-    <pre id="event-result"></pre>
-  </main>
-</template>
-
-<script setup>
-import {onMounted, reactive} from 'vue'
-import {Greet}               from '../../wailsjs/go/main/App'
-import {EventsOn}            from "../../wailsjs/runtime/runtime.js";
+<script lang="ts" setup>
+import {reactive} from 'vue'
+import {Greet} from '../../wailsjs/go/main/App'
 
 const data = reactive({
   name: "",
@@ -28,14 +13,17 @@ function greet() {
   })
 }
 
-onMounted(() => {
-  const el = document.getElementById("event-result")
-  EventsOn("terminal-echo", (e) => {
-    el.innerText = e
-  });
-})
-
 </script>
+
+<template>
+  <main>
+    <div id="result" class="result">{{ data.resultText }}</div>
+    <div id="input" class="input-box">
+      <input id="name" v-model="data.name" autocomplete="off" class="input" type="text"/>
+      <button class="btn" @click="greet">Greet</button>
+    </div>
+  </main>
+</template>
 
 <style scoped>
 .result {

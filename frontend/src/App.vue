@@ -1,25 +1,27 @@
 <template>
   <eq-window
-      style="margin: 10px auto 0;width: 800px; height: 600px;"
-      title="ProjectEQ Expansions Client Switcher Utility" >
-
+      style="margin: 10px auto 0; width: 100vh; height: 90vh;"
+      :title-draggable="true"
+      title="ProjectEQ Expansions Client Switcher Utility"
+  >
     <div class="row">
-      <div v-for="(expansion, expansionId) in expansions" class="row col-12">
-        <div class="col-lg-12 col-sm-12" @click="selectExpansion(expansionId)">
-          <div class="text-center" style="width: 70px; display: inline-block;">
-            <img
-                :src="getExpansionIconUrlSmall(expansionId)"
-                :style="'width: 56px;' + (isExpansionSelected(expansionId) ? 'border: 2px solid #dadada; border-radius: 7px;' : 'border: 2px solid rgb(218 218 218 / 30%); border-radius: 7px;')"
-                class="mt-1 p-1"
-            >
-          </div>
+      <div
+          v-for="(expansion, expansionId) in expansions"
+          class="col-12"
+      >
+        <div
+            class="mt-1"
+            :style="(isExpansionSelected(expansionId) ? 'opacity: 1' : 'opacity: .5')"
+            @mouseover="selectedExpansiones[expansionId] = true"
+            @mouseout="selectedExpansiones[expansionId] = false"
+        >
+          <img
+              :style="'width: 56px;' + (isExpansionSelected(expansionId) ? 'border: 2px solid #dadada; border-radius: 7px;' : 'border: 2px solid rgb(218 218 218 / 30%); border-radius: 7px;')"
+              :src="getExpansionImage(expansion)" style="width: 56px;"
+          >
           ({{ expansionId }})
           {{ expansion.name }}
         </div>
-      </div>
-      <div class="form-group text-center">
-        <button class='eq-button mr-3' @click="selectAll()" style="display: inline-block; width: 80px">All</button>
-        <button class='eq-button' @click="selectNone()" style="display: inline-block; width: 80px">None</button>
       </div>
     </div>
 
@@ -31,82 +33,28 @@
 </style>
 
 <script>
-import EqWindow          from "./components/eq-ui/EQWindow.vue";
 import {EXPANSIONS_FULL} from "./expansions/eq-expansions.ts";
-import expansions        from "./expansions/expansions.ts";
+import EqWindow          from "./components/eq-ui/EQWindow.vue";
+
 export default {
   components: { EqWindow },
-  watch: {
-    mask: {
-      // the callback will be called immediately after the start of the observation
-      immediate: true,
-      handler(val, oldVal) {
-        this.currentMask = parseInt(this.mask)
-        this.calculateFromBitmask();
-      }
-    }
-  },
   data() {
     return {
       expansions: EXPANSIONS_FULL,
       selectedExpansiones: {},
-      currentMask: 0
     }
   },
   mounted() {
-    this.currentMask = parseInt(this.mask)
-    this.calculateFromBitmask();
+
+    console.log("hello")
   },
   methods: {
-    getExpansionIconUrlSmall(expansionId) {
-      return expansions.getExpansionIconUrlSmall(expansionId)
-    },
-    selectAll() {
-      Object.keys(this.expansions).reverse().forEach((expansionId) => {
-        this.selectedExpansiones[expansionId] = true;
-      });
-      this.$forceUpdate();
-      this.calculateToBitmask();
-    },
-    selectNone() {
-      Object.keys(this.expansions).reverse().forEach((expansionId) => {
-        this.selectedExpansiones[expansionId] = false;
-      });
-      this.$forceUpdate();
-      this.calculateToBitmask();
-    },
-    calculateFromBitmask() {
-      Object.keys(this.expansions).reverse().forEach((expansionId) => {
-        const gameExpansion                   = this.expansions[expansionId];
-        this.selectedExpansiones[expansionId] = false
-        if (this.currentMask >= gameExpansion.mask) {
-          this.currentMask -= gameExpansion.mask;
-          this.selectedExpansiones[expansionId] = true;
-        }
-      });
-      this.$forceUpdate()
-    },
-    calculateToBitmask() {
-      let bitmask = 0;
-
-      Object.keys(this.expansions).reverse().forEach((expansionId) => {
-        const gameExpansion = this.expansions[expansionId];
-        if (this.selectedExpansiones[expansionId]) {
-          bitmask += parseInt(gameExpansion.mask);
-        }
-      });
-
-      this.$emit("update:inputData", bitmask.toString());
-    },
-    selectExpansion: function (expansionId) {
-      this.selectedExpansiones[expansionId] = !this.selectedExpansiones[expansionId];
-
-      this.$forceUpdate()
-      this.calculateToBitmask();
-    },
     isExpansionSelected: function (expansionId) {
       return this.selectedExpansiones[expansionId]
-    }
+    },
+    getExpansionImage(expansion) {
+      return new URL('/src/assets/expansions/' + expansion.icon, import.meta.url).href;
+    },
   }
 }
 </script>
