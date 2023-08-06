@@ -71,6 +71,14 @@
 
               <span class="text-muted"> Files get patched in order of expansion</span>
 
+              <button
+                  class='eq-button ml-3'
+                  @click="dumpPatchFiles()"
+                  style="display: inline-block; margin: 0 0 10px;"
+              >
+                Dump Patch Files
+              </button>
+
               <eq-tabs
                   :selected="filesToCopy[0].name"
                   :key="now"
@@ -137,11 +145,17 @@
 </style>
 
 <script>
-import {EXPANSIONS_FULL}                                     from "./expansions/eq-expansions.ts";
-import EqWindow                                                                      from "./components/eq-ui/EQWindow.vue";
-import {GetConfig, GetExpansionFiles, OpenFileDialogueEqDir, PatchFilesForExpansion} from "../wailsjs/go/main/App.js";
-import EqTabs                                                                        from "./components/eq-ui/EQTabs.vue";
-import EqTab                                                 from "./components/eq-ui/EQTab.vue";
+import {EXPANSIONS_FULL} from "./expansions/eq-expansions.ts";
+import EqWindow          from "./components/eq-ui/EQWindow.vue";
+import {
+  DumpPatchFilesForExpansion,
+  GetConfig,
+  GetExpansionFiles,
+  OpenFileDialogueEqDir,
+  PatchFilesForExpansion
+}                        from "../wailsjs/go/main/App.js";
+import EqTabs            from "./components/eq-ui/EQTabs.vue";
+import EqTab             from "./components/eq-ui/EQTab.vue";
 
 export default {
   components: { EqTab, EqTabs, EqWindow },
@@ -163,6 +177,12 @@ export default {
       if (confirm('Are you sure you want to patch these files?')) {
         await PatchFilesForExpansion(parseInt(this.selectedExpansion))
         alert("Files patched successfully")
+      }
+    },
+    async dumpPatchFiles() {
+      if (confirm('Are you sure you want to generate a dump of these patch files?')) {
+        await DumpPatchFilesForExpansion(parseInt(this.selectedExpansion))
+        // alert("Files dumped successfully")
       }
     },
     async getConfig() {
@@ -195,7 +215,7 @@ export default {
     async selectExpansion(expansionId) {
       this.selectedExpansion = expansionId
       const files            = await GetExpansionFiles(expansionId)
-      this.filesToCopy = files ? files : []
+      this.filesToCopy       = files ? files : []
 
       this.now = Date.now()
       // alert('Selected expansion: ' + expansion.name)

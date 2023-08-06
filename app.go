@@ -85,3 +85,7 @@ func (a *App) GetConfig() config.Config {
 func (a *App) PatchFilesForExpansion(expansionId int) {
 	a.assets.PatchFilesForExpansion(expansionId)
 }
+
+func (a *App) DumpPatchFilesForExpansion(expansionId int) {
+	a.assets.DumpPatchFilesForExpansion(expansionId)
+}

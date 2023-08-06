@@ -3,6 +3,8 @@
 import {config} from '../models';
 import {eqassets} from '../models';
 
+export function DumpPatchFilesForExpansion(arg1:number):Promise<void>;
+
 export function GetConfig():Promise<config.Config>;
 
 export function GetExpansionFiles(arg1:string):Promise<Array<eqassets.ExpansionFiles>>;

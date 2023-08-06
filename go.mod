@@ -4,7 +4,9 @@ go 1.18
 
 require (
 	github.com/gosimple/slug v1.13.1
+	github.com/labstack/gommon v0.3.1
 	github.com/otiai10/copy v1.12.0
+	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/wailsapp/wails/v2 v2.5.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -16,7 +18,6 @@ require (
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/labstack/echo/v4 v4.9.0 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/leaanthony/go-ansi-parser v1.0.1 // indirect
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.5.0 // indirect
