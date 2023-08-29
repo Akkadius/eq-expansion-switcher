@@ -883,7 +883,7 @@ table.bordered TH {
 
 @font-face {
     font-family: 'menuetto';
-    src: url('~@/assets/fonts/Menuetto.ttf') format('truetype');
+    src: url('Menuetto.ttf') format('truetype');
 }
 
 /*Headers*/

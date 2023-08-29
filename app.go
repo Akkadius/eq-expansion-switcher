@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
+	"os"
 	"strconv"
 )
 
@@ -88,4 +89,16 @@ func (a *App) PatchFilesForExpansion(expansionId int) {
 
 func (a *App) DumpPatchFilesForExpansion(expansionId int) {
 	a.assets.DumpPatchFilesForExpansion(expansionId)
+}
+
+func (a *App) CloseApp() {
+	dialog, _ := runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.QuestionDialog,
+		Title:   "Quit?",
+		Message: "Are you sure you want to quit?",
+	})
+
+	if dialog == "Yes" {
+		os.Exit(0)
+	}
 }

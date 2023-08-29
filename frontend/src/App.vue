@@ -4,6 +4,14 @@
       :title-draggable="true"
       title="ProjectEQ Expansions Client Switcher Utility"
   >
+    <div
+        class="hover-highlight"
+        style="position: absolute; right: 30px; top: -18px; z-index: 999999; font-size: 20px; cursor: pointer;"
+        @click="closeApp()"
+    >
+      x
+    </div>
+
     <div class="row">
       <div class="col-4">
         <h6>ProjectEQ Expansions Client <br>Switcher Utility</h6>
@@ -18,7 +26,7 @@
               class="col-12"
           >
             <div
-                class="mt-1"
+                class="mt-1 text-left"
                 :style="(isExpansionSelected(expansionId) ? 'opacity: 1' : 'opacity: .5')"
                 @mouseover="selectedExpansions[expansionId] = true"
                 @mouseout="selectedExpansions[expansionId] = false"
@@ -26,7 +34,7 @@
             >
               <img
                   :style="'width: 56px;' + (isExpansionSelected(expansionId) ? 'border: 2px solid #dadada; border-radius: 7px;' : 'border: 2px solid rgb(218 218 218 / 30%); border-radius: 7px;')"
-                  :src="getExpansionImage(expansion)" style="width: 56px;"
+                  :src="getExpansionImage(expansion.icon)" style="width: 56px;"
               >
               ({{ expansionId }})
               {{ expansion.name }}
@@ -91,7 +99,7 @@
                     :selected="i === 0"
                 >
                   <img
-                      :src="getExpansionImage(expansions[f.expansion.id])"
+                      :src="getExpansionImage(expansions[f.expansion.id].icon)"
                       style="width: 56px; "
                   >
                   {{ f.expansion.name }}
@@ -124,7 +132,7 @@
               <div>
                 <h6 class="eq-header">
                   <img
-                      :src="getExpansionImage(expansions[selectedExpansion])"
+                      :src="getExpansionImage(expansions[selectedExpansion].icon)"
                       style="width: 56px; border-radius: 7px;"
                   >
                   {{ expansions[selectedExpansion].name }}
@@ -146,16 +154,18 @@
 
 <script>
 import {EXPANSIONS_FULL} from "./expansions/eq-expansions.ts";
-import EqWindow          from "./components/eq-ui/EQWindow.vue";
+import EqWindow from "./components/eq-ui/EQWindow.vue";
 import {
+  CloseApp,
   DumpPatchFilesForExpansion,
   GetConfig,
   GetExpansionFiles,
   OpenFileDialogueEqDir,
   PatchFilesForExpansion
-}                        from "../wailsjs/go/main/App.js";
-import EqTabs            from "./components/eq-ui/EQTabs.vue";
+}               from "../wailsjs/go/main/App.js";
+import EqTabs   from "./components/eq-ui/EQTabs.vue";
 import EqTab             from "./components/eq-ui/EQTab.vue";
+import useAssets from "./assets/assets.js";
 
 export default {
   components: { EqTab, EqTabs, EqWindow },
@@ -173,6 +183,9 @@ export default {
     this.getConfig()
   },
   methods: {
+    closeApp(){
+      CloseApp()
+    },
     async patchFiles() {
       if (confirm('Are you sure you want to patch these files?')) {
         await PatchFilesForExpansion(parseInt(this.selectedExpansion))
@@ -209,8 +222,8 @@ export default {
     isExpansionSelected: function (expansionId) {
       return this.selectedExpansion === expansionId
     },
-    getExpansionImage(expansion) {
-      return new URL('/src/assets/expansions/' + expansion.icon, import.meta.url).href;
+    getExpansionImage(icon) {
+      return useAssets(`/src/assets/expansions/${icon}`)
     },
     async selectExpansion(expansionId) {
       this.selectedExpansion = expansionId

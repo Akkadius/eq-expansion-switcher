@@ -40,6 +40,7 @@ func main() {
 			WindowIsTranslucent: true,
 			Icon:                icon,
 		},
+
 		Bind: []interface{}{
 			app,
 		},

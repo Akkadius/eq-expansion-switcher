@@ -3,6 +3,8 @@
 import {config} from '../models';
 import {eqassets} from '../models';
 
+export function CloseApp():Promise<void>;
+
 export function DumpPatchFilesForExpansion(arg1:number):Promise<void>;
 
 export function GetConfig():Promise<config.Config>;
