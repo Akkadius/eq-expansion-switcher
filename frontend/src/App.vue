@@ -4,6 +4,7 @@
       :title-draggable="true"
       title="ProjectEQ Expansions Client Switcher Utility"
       class="main-window pb-0"
+      id="main-window"
   >
     <div
         class="hover-highlight"
@@ -157,10 +158,10 @@
 </template>
 
 <style>
-.main-window::before {
+#main-window::before {
   background-size: cover;
-  background: url("https://user-images.githubusercontent.com/3319450/209234411-25086f15-d076-4e47-bc96-0c72518fbf87.png") center;
-  opacity: .05;
+  opacity: .06;
+  background: url("@/assets/images/firiona.png") center;
 }
 </style>
 
