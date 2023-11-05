@@ -8,6 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -20,15 +21,9 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	a := eqassets.NewEqAssets()
-	err := a.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	return &App{
 		ctx:    context.Background(),
-		assets: a,
+		assets: eqassets.NewEqAssets(),
 		config: config.Get(),
 	}
 }
@@ -115,6 +110,51 @@ func (a *App) CloseApp() {
 	if dialog == "Yes" {
 		os.Exit(0)
 	}
+}
+
+type AppInitializationCheck struct {
+	IsInitialized bool `json:"is_initialized"`
+}
+
+func (a *App) AppInitializationCheck() AppInitializationCheck {
+	// get count of files in a.eqassets.Basepath
+	// if count > 0, then we're initialized
+	count := 0
+	err := filepath.Walk(a.assets.Basepath(), func(path string, info os.FileInfo, err error) error {
+		if info == nil {
+			return nil
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		count++
+		return nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("count:", count)
+
+	r := AppInitializationCheck{
+		IsInitialized: count > 0,
+	}
+
+	return r
+}
+
+func (a *App) AppInitialization() error {
+	err := a.assets.InitPatchFiles()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *App) GetAssetBasepath() string {
+	return a.assets.Basepath()
 }
 
 func (a *App) validateEqDirExists() bool {

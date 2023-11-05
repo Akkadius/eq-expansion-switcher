@@ -10,4 +10,5 @@ import '@/assets/global.css'
 import '@/components/eq-ui/styles/eq-ui.css'
 
 const app = createApp(App)
+
 app.mount('#app')

@@ -3,11 +3,14 @@ package eqassets
 import (
 	"encoding/json"
 	"eq-expansion-switcher/internal/config"
+	"eq-expansion-switcher/internal/unzip"
 	"fmt"
 	"github.com/gosimple/slug"
 	"github.com/labstack/gommon/log"
 	cp "github.com/otiai10/copy"
 	"github.com/skratchdot/open-golang/open"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -17,48 +20,66 @@ import (
 
 // EqAssets struct
 type EqAssets struct {
-	expansions []Expansion
+	expansions []Expansion // expansions.json
+	basepath   string      // base path for patch files
+}
+
+func (e *EqAssets) Basepath() string {
+	return e.basepath
 }
 
 // NewEqAssets creates a new EqAssets application struct
 func NewEqAssets() *EqAssets {
-	return &EqAssets{}
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	basepath := filepath.Join(cacheDir, "peq-expansion-switcher")
+	if _, err := os.Stat(basepath); os.IsNotExist(err) {
+		err := os.MkdirAll(basepath, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	e := &EqAssets{
+		basepath: basepath,
+	}
+
+	// load expansions
+	_ = json.Unmarshal(expansionJson, &e.expansions)
+
+	return e
 }
 
 // Init initializes the EqAssets application struct
 func (e *EqAssets) Init() error {
 	// make sure ./files exists
-	if _, err := os.Stat("./files"); os.IsNotExist(err) {
-		err := os.MkdirAll("./files", 0755)
-		if err != nil {
-			return err
-		}
-	}
-
-	// load expansions
-	err := json.Unmarshal(expansionJson, &e.expansions)
-	if err != nil {
-		return err
-	}
+	//if _, err := os.Stat(e.basepath); os.IsNotExist(err) {
+	//	err := os.MkdirAll(e.basepath, 0755)
+	//	if err != nil {
+	//		return err
+	//	}
+	//}
 
 	// make sure ./files/<expansion-id>-<expansion-name> exists
-	for _, s := range e.expansions {
-		// make sure dir exists
-		dir := filepath.Join("./files", fmt.Sprintf("%v-%v", s.Id, slug.Make(s.Name)))
-		if _, err := os.Stat(dir); os.IsNotExist(err) {
-			fmt.Println("Creating dir:", dir)
-			err := os.MkdirAll(dir, 0755)
-			if err != nil {
-				return err
-			}
-		}
-	}
+	//for _, s := range e.expansions {
+	//	// make sure dir exists
+	//	dir := filepath.Join(e.basepath, "files", fmt.Sprintf("%v-%v", s.Id, slug.Make(s.Name)))
+	//	if _, err := os.Stat(dir); os.IsNotExist(err) {
+	//		fmt.Println("Creating dir:", dir)
+	//		err := os.MkdirAll(dir, 0755)
+	//		if err != nil {
+	//			return err
+	//		}
+	//	}
+	//}
 
 	return nil
 }
 
 func (e *EqAssets) GetAsset(name string) ([]byte, error) {
-
 	return nil, nil
 }
 
@@ -73,9 +94,12 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 	fmt.Println("GetExpansionFiles", expansionId)
 
 	for _, s := range e.expansions {
+		fmt.Println("s.Id", s.Id)
+
 		// convert expansionId to int
 		id, err := strconv.Atoi(expansionId)
 		if err != nil {
+			fmt.Println("err:", err)
 			return files
 		}
 
@@ -84,7 +108,7 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 
 		if s.Id <= id {
 			// make sure dir exists
-			dir := filepath.Join("./files", fmt.Sprintf("%v-%v", s.Id, slug.Make(s.Name)))
+			dir := filepath.Join(e.basepath, "files", fmt.Sprintf("%v-%v", s.Id, slug.Make(s.Name)))
 			fmt.Println("dir:", dir)
 			if _, err := os.Stat(dir); !os.IsNotExist(err) {
 				_ = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
@@ -214,4 +238,46 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) {
 	}
 
 	_ = open.Run(tmpdir)
+}
+
+func (e *EqAssets) InitPatchFiles() error {
+	fmt.Println("InitPatchFiles")
+
+	// download https://github.com/Akkadius/eq-expansion-switcher/releases/download/v1.0.0/files.zip
+	// unzip to e.assets.Basepath()
+	resp, err := http.Get("https://github.com/Akkadius/eq-expansion-switcher/releases/download/v1.0.0/files.zip")
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	// Create the file
+	source := filepath.Join(os.TempDir(), "files.zip")
+	out, err := os.Create(source)
+	if err != nil {
+		return err
+	}
+
+	defer out.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	// unzip
+	err = unzip.New(source, e.basepath).Extract()
+	if err != nil {
+		return err
+	}
+
+	// remove zip
+	err = os.Remove(source)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

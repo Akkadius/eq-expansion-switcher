@@ -72,3 +72,20 @@ export namespace eqassets {
 
 }
 
+export namespace main {
+	
+	export class AppInitializationCheck {
+	    is_initialized: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new AppInitializationCheck(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.is_initialized = source["is_initialized"];
+	    }
+	}
+
+}
+
