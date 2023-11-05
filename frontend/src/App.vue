@@ -3,6 +3,7 @@
       style="margin: 10px 0 0; width: 100%; height: 99%;"
       :title-draggable="true"
       title="ProjectEQ Expansions Client Switcher Utility"
+      class="main-window pb-0"
   >
     <div
         class="hover-highlight"
@@ -52,7 +53,7 @@
       </div>
       <div
           class="col-8"
-          style="overflow-y: scroll; height: 99vh"
+          style="overflow-y: scroll; height: 96vh"
       >
         <div class="eq-window-simple">
           <button
@@ -112,6 +113,7 @@
                   <img
                       :src="getExpansionImage(expansions[f.expansion.id].icon)"
                       style="width: 56px; "
+                      alt=""
                   >
                   {{ f.expansion.name }}
 
@@ -120,11 +122,6 @@
                       style="display: table; font-size: 14px; overflow-x: scroll "
                       v-if="f.files && f.files.length > 0"
                   >
-                    <thead>
-                    <tr>
-                      <th>File(s) ({{ f.files.length }})</th>
-                    </tr>
-                    </thead>
                     <tbody>
                     <tr v-for="file in f.files">
                       <td>{{ file.split('/').slice(2).join('/') }}</td>
@@ -160,7 +157,11 @@
 </template>
 
 <style>
-
+.main-window::before {
+  background-size: cover;
+  background: url("https://user-images.githubusercontent.com/3319450/209234411-25086f15-d076-4e47-bc96-0c72518fbf87.png") center;
+  opacity: .05;
+}
 </style>
 
 <script>
