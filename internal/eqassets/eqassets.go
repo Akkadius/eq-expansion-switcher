@@ -94,8 +94,6 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 	fmt.Println("GetExpansionFiles", expansionId)
 
 	for _, s := range e.expansions {
-		fmt.Println("s.Id", s.Id)
-
 		// convert expansionId to int
 		id, err := strconv.Atoi(expansionId)
 		if err != nil {
@@ -109,7 +107,6 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 		if s.Id <= id {
 			// make sure dir exists
 			dir := filepath.Join(e.basepath, "files", fmt.Sprintf("%v-%v", s.Id, slug.Make(s.Name)))
-			fmt.Println("dir:", dir)
 			if _, err := os.Stat(dir); !os.IsNotExist(err) {
 				_ = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 					if info.IsDir() {

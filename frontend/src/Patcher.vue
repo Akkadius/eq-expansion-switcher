@@ -226,10 +226,11 @@ export default defineComponent({
       return total
     },
     formatFileName(file) {
+
       // if windows
       if (file.indexOf('\\') > -1) {
         return file.replace(this.basepath, "")
-          .split('\\').slice(3).join('\\')
+            .split('\\').slice(3).join('\\')
       }
 
       return file.replace(this.basepath, "")
