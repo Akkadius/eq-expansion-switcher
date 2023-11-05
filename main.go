@@ -21,12 +21,13 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:     "ProjectEQ Expansions Client Switcher Utility",
-		MinWidth:  1024,
-		Width:     1024,
+		Title:    "ProjectEQ Expansions Client Switcher Utility",
+		MinWidth: 1024,
+		//Width:     1024,
 		MinHeight: 900,
-		Height:    900,
+		//Height:    900,
 		Frameless: true,
+		//Fullscreen: true,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

@@ -1,9 +1,17 @@
 <template>
   <eq-window
-      style="margin: 0px; margin-top:10px; width: 98vw; height: 97vh;"
+      style="margin: 10px 0 0; width: 100%; height: 99%;"
       :title-draggable="true"
       title="ProjectEQ Expansions Client Switcher Utility"
   >
+    <div
+        class="hover-highlight"
+        style="position: absolute; right: 50px; top: -14px; z-index: 999999; font-size: 18px; cursor: pointer;"
+        @click="maximizeApp()"
+    >
+      🗖
+    </div>
+
     <div
         class="hover-highlight"
         style="position: absolute; right: 30px; top: -18px; z-index: 999999; font-size: 20px; cursor: pointer;"
@@ -44,7 +52,7 @@
       </div>
       <div
           class="col-8"
-          style="overflow-y: scroll; height: 92vh"
+          style="overflow-y: scroll; height: 99vh"
       >
         <div class="eq-window-simple">
           <button
@@ -63,7 +71,10 @@
               disabled
           >
         </div>
-        <div class="eq-window-simple" v-if="selectedExpansion >= 0 && expansions[selectedExpansion]">
+        <div
+            class="eq-window-simple"
+            v-if="selectedExpansion >= 0 && expansions[selectedExpansion]"
+        >
           <div
               class="row"
               v-if="filesToCopy && filesToCopy.length > 0"
@@ -153,8 +164,8 @@
 </style>
 
 <script>
-import {EXPANSIONS_FULL} from "./expansions/eq-expansions.ts";
-import EqWindow from "./components/eq-ui/EQWindow.vue";
+import {EXPANSIONS_FULL}      from "./expansions/eq-expansions.ts";
+import EqWindow               from "./components/eq-ui/EQWindow.vue";
 import {
   CloseApp,
   DumpPatchFilesForExpansion,
@@ -162,10 +173,11 @@ import {
   GetExpansionFiles,
   OpenFileDialogueEqDir,
   PatchFilesForExpansion
-}               from "../wailsjs/go/main/App.js";
-import EqTabs   from "./components/eq-ui/EQTabs.vue";
-import EqTab             from "./components/eq-ui/EQTab.vue";
-import useAssets from "./assets/assets.js";
+}                             from "../wailsjs/go/main/App.js";
+import EqTabs                 from "./components/eq-ui/EQTabs.vue";
+import EqTab                  from "./components/eq-ui/EQTab.vue";
+import useAssets              from "./assets/assets.js";
+import {WindowToggleMaximise} from "../wailsjs/runtime/runtime.js";
 
 export default {
   components: { EqTab, EqTabs, EqWindow },
@@ -183,8 +195,11 @@ export default {
     this.getConfig()
   },
   methods: {
-    closeApp(){
+    closeApp() {
       CloseApp()
+    },
+    maximizeApp() {
+      WindowToggleMaximise()
     },
     async patchFiles() {
       if (confirm('Are you sure you want to patch these files?')) {
