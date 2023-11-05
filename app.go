@@ -84,10 +84,24 @@ func (a *App) GetConfig() config.Config {
 }
 
 func (a *App) PatchFilesForExpansion(expansionId int) {
+	if !a.validateEqDirExists() {
+		return
+	}
+
 	a.assets.PatchFilesForExpansion(expansionId)
+
+	_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.InfoDialog,
+		Title:   "Patch",
+		Message: "Patch Complete!",
+	})
 }
 
 func (a *App) DumpPatchFilesForExpansion(expansionId int) {
+	if !a.validateEqDirExists() {
+		return
+	}
+
 	a.assets.DumpPatchFilesForExpansion(expansionId)
 }
 
@@ -101,4 +115,17 @@ func (a *App) CloseApp() {
 	if dialog == "Yes" {
 		os.Exit(0)
 	}
+}
+
+func (a *App) validateEqDirExists() bool {
+	if a.config.EqDir == "" {
+		_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.ErrorDialog,
+			Title:   "Error",
+			Message: "EverQuest Client Directory not set.",
+		})
+		return false
+	}
+
+	return true
 }

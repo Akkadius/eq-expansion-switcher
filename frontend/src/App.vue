@@ -205,7 +205,6 @@ export default {
     async patchFiles() {
       if (confirm('Are you sure you want to patch these files?')) {
         await PatchFilesForExpansion(parseInt(this.selectedExpansion))
-        alert("Files patched successfully")
       }
     },
     async dumpPatchFiles() {
