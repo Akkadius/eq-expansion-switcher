@@ -123,7 +123,7 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 		}
 	}
 
-	fmt.Println(files)
+	//fmt.Println(files)
 
 	return files
 }
@@ -271,10 +271,7 @@ func (e *EqAssets) InitPatchFiles() error {
 	}
 
 	// remove zip
-	err = os.Remove(source)
-	if err != nil {
-		return err
-	}
+	_ = os.Remove(source)
 
 	return nil
 }

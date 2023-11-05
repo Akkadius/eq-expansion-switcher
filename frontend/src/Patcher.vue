@@ -225,6 +225,8 @@ export default defineComponent({
       }
       return total
     },
+
+    // we don't want to show the full path, just the relative path
     formatFileName(file) {
 
       // if windows
