@@ -110,6 +110,7 @@
                     :key="f.expansion.id + '-' + selectedExpansion"
                     :name="f.expansion.name + ' (' + f.files.length + ')'"
                     :selected="i === 0"
+                    class="fade-in"
                 >
                   <img
                       :src="getExpansionImage(expansions[f.expansion.id].icon)"
