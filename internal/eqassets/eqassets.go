@@ -120,6 +120,10 @@ func (e *EqAssets) PatchFilesForExpansion(id int) {
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
 				_ = filepath.Walk(c.EqDir, func(path string, info os.FileInfo, err error) error {
+					if info == nil {
+						return nil
+					}
+
 					if info.IsDir() {
 						return nil
 					}
