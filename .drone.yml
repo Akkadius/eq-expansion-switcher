@@ -5,13 +5,6 @@ name: default
 concurrency:
   limit: 1
 
-volumes:
-  - name: cache-be-wails
-    host:
-      path: /home/go/pkg
-  - name: cache-fe-wails
-    host:
-      path: /home/go/src/frontend/node_modules
 
 steps:
   - name: build-release
@@ -27,8 +20,4 @@ steps:
     when:
       branch: [ "main" ]
       event: [ push ]
-    volumes:
-      - name: cache-be-wails
-        path: /home/go/pkg
-      - name: cache-fe-wails
-        path: /drone/src/frontend/node_modules
+
