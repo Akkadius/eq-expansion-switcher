@@ -15,7 +15,7 @@ services:
   #############################################
 
   workspace:
-    image: akkadius/wails:v2.0.2
+    image: akkadius/wails:v2.0.3
     build:
       context: ./containers/workspace
     hostname: wails-workspace

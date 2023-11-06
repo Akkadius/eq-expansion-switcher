@@ -70,7 +70,11 @@ build: ##@build Builds binary for windows
 #----------------------
 
 image-build: ##@build Builds docker image
-	docker build -t akkadius/wails:v2.0.2 ./containers/workspace
+	docker build -t akkadius/wails:v2.0.3 ./containers/workspace
 
 image-publish: ##@build Publishes docker image
-	docker push akkadius/wails:v2.0.2
+	docker push akkadius/wails:v2.0.3
+
+image-build-and-publish: ##@build Builds and publishes docker image
+	make image-build
+	make image-publish

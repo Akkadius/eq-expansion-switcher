@@ -94,6 +94,8 @@ RUN sudo npm install -g gh-release && \
 
 RUN sudo npm install -g vue-tsc
 
+RUN sudo apt-get install build-essential -y
+
 #############################################
 # bash
 #############################################
