@@ -5,7 +5,6 @@ name: default
 concurrency:
   limit: 1
 
-
 steps:
   - name: build-release
     image: akkadius/wails:v2.0.3
@@ -15,7 +14,7 @@ steps:
     commands:
       - sudo chown -R go /drone/src
       - sudo chown -R go /home/go/pkg
-      - make build
+      - make ci-build
     when:
       branch: [ "main" ]
       event: [ push ]

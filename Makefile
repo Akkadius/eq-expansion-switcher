@@ -56,14 +56,14 @@ help: ##@other Show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 
 #----------------------
-# build
+# ci-build
 #----------------------
 
-build: ##@build Builds binary for windows
+ci-build: ##@ci-build Builds and releases
 	wails build -platform=windows/amd64
 	@echo "Zipping binary"
 	zip -r -j ./eq-expansion-switcher-windows-amd64.zip ./build/bin/eq-expansion-switcher.exe
-
+	gh-release --assets=eq-expansion-switcher-windows-amd64.zip -y
 
 #----------------------
 # image build
