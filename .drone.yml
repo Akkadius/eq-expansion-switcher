@@ -26,7 +26,7 @@ steps:
       - make build
     when:
       branch: [ "master" ]
-      event: [ push ]
+      event: [ push ] 
     volumes:
       - name: cache-be
         path: /home/go/pkg
