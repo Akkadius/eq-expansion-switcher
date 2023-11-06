@@ -1,0 +1,37 @@
+version: '2.4'
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  shared-pkg:
+  build-cache:
+
+services:
+
+  #############################################
+  # workspace
+  #############################################
+
+  workspace:
+    image: akkadius/wails:v2.0.0
+    build:
+      context: ./containers/workspace
+    hostname: wails-workspace
+    tty: true
+    volumes:
+      - ./:/home/go/src
+      - build-cache:/home/go/.cache/
+      - shared-pkg:/home/go/pkg
+    environment:
+      TZ: America/Chicago
+      CGO_ENABLED: 0
+      APP_ENV: local
+      TERM: xterm-256color
+    ports:
+      - ${IP_ADDRESS:-0.0.0.0}:3010:3010
+      - ${IP_ADDRESS:-0.0.0.0}:8080:8080
+    networks:
+      - backend
+    command: "/bin/bash -c 'sudo chown go -R /home/go/pkg && go get || true && bash'"

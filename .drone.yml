@@ -1,0 +1,34 @@
+kind: pipeline
+name: default
+
+# Limits how many of these builds can run on the drone runner at a time, this isn't about cores
+concurrency:
+  limit: 1
+
+volumes:
+  - name: cache-be
+    host:
+      path: /home/go/pkg
+  - name: cache-fe
+    host:
+      path: /home/go/src/frontend/node_modules
+
+steps:
+  - name: spire-build-release
+    image: akkadius/wails:v2.0.0
+    environment:
+      GH_RELEASE_GITHUB_API_TOKEN:
+        from_secret: GH_RELEASE_GITHUB_API_TOKEN
+    commands:
+      - sudo chown -R go /drone/src
+      - sudo chown -R go /home/go/pkg
+      - sudo chown -R go /drone/src/frontend/node_modules
+      - make build
+    when:
+      branch: [ "master" ]
+      event: [ push ]
+    volumes:
+      - name: cache-be
+        path: /home/go/pkg
+      - name: cache-fe
+        path: /drone/src/frontend/node_modules

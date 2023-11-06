@@ -23,7 +23,8 @@
             class="mt-3"
             v-if="installing"
             :progress="0"
-            :progress-text="'Installing...'"/>
+            :progress-text="'Installing...'"
+        />
 
         <info-error-banner
             :notification="notification"
@@ -62,7 +63,7 @@ export default {
         this.installing = false
         this.$emit("initialized")
       } catch (e) {
-        this.error = e
+        this.error      = e
         this.installing = false
       }
     }

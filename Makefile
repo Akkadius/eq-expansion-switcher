@@ -61,5 +61,16 @@ help: ##@other Show this help.
 
 build: ##@build Builds binary for windows
 	wails build -platform=windows/amd64
-	@echo "Ziping binary"
+	@echo "Zipping binary"
 	zip -r -j ./eq-expansion-switcher-windows-amd64.zip ./build/bin/eq-expansion-switcher.exe
+
+
+#----------------------
+# image build
+#----------------------
+
+image-build: ##@build Builds docker image
+	docker build -t akkadius/wails:v2.0.0 ./containers/workspace
+
+image-publish: ##@build Publishes docker image
+	docker push akkadius/wails:v2.0.0
