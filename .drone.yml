@@ -6,10 +6,10 @@ concurrency:
   limit: 1
 
 volumes:
-  - name: cache-be
+  - name: cache-be-wails
     host:
       path: /home/go/pkg
-  - name: cache-fe
+  - name: cache-fe-wails
     host:
       path: /home/go/src/frontend/node_modules
 
