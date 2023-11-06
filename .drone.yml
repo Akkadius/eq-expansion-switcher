@@ -28,7 +28,7 @@ steps:
       branch: [ "main" ]
       event: [ push ]
     volumes:
-      - name: cache-be
+      - name: cache-be-wails
         path: /home/go/pkg
-      - name: cache-fe
+      - name: cache-fe-wails
         path: /drone/src/frontend/node_modules
