@@ -15,7 +15,7 @@ volumes:
 
 steps:
   - name: build-release
-    image: akkadius/wails:v2.0.1
+    image: akkadius/wails:v2.0.2
     environment:
       GH_RELEASE_GITHUB_API_TOKEN:
         from_secret: GH_RELEASE_GITHUB_API_TOKEN
