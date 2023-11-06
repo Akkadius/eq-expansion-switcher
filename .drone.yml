@@ -14,7 +14,7 @@ volumes:
       path: /home/go/src/frontend/node_modules
 
 steps:
-  - name: spire-build-release
+  - name: build-release
     image: akkadius/wails:v2.0.0
     environment:
       GH_RELEASE_GITHUB_API_TOKEN:
