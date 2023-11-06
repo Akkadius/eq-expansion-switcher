@@ -86,7 +86,7 @@ RUN go install github.com/wailsapp/wails/v2/cmd/wails@latest
 #############################################
 RUN cd /tmp/ && curl -SLO https://deb.nodesource.com/nsolid_setup_deb.sh && \
     chmod 500 nsolid_setup_deb.sh && \
-    sudo ./nsolid_setup_deb.sh 20 && \
+    sudo ./nsolid_setup_deb.sh 18 && \
     sudo apt-get install nodejs -y
 
 RUN sudo npm install -g gh-release && \
