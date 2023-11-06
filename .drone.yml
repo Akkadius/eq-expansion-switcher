@@ -25,8 +25,8 @@ steps:
       - sudo chown -R go /drone/src/frontend/node_modules
       - make build
     when:
-      branch: [ "master" ]
-      event: [ push ] 
+      branch: [ "main" ]
+      event: [ push ]
     volumes:
       - name: cache-be
         path: /home/go/pkg
