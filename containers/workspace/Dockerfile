@@ -89,7 +89,10 @@ RUN cd /tmp/ && curl -SLO https://deb.nodesource.com/nsolid_setup_deb.sh && \
     sudo ./nsolid_setup_deb.sh 20 && \
     sudo apt-get install nodejs -y
 
-RUN sudo npm install -g gh-release && sudo npm install -g @vue/cli
+RUN sudo npm install -g gh-release && \
+    sudo npm install -g @vue/cli
+
+RUN sudo npm install -g vue-tsc
 
 #############################################
 # bash
