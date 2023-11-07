@@ -7,6 +7,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	"os"
 )
 
 //go:embed all:frontend/dist
@@ -16,6 +17,11 @@ var assets embed.FS
 var icon []byte
 
 func main() {
+	isDev := len(os.Getenv("devserver")) > 0
+	if isDev {
+		_ = os.Setenv("APP_ENV", "dev")
+	}
+
 	// Create an instance of the app structure
 	app := NewApp()
 

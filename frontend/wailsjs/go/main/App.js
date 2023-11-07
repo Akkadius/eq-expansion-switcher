@@ -10,6 +10,10 @@ export function AppInitializationCheck() {
   return window['go']['main']['App']['AppInitializationCheck']();
 }
 
+export function CheckForUpdate() {
+  return window['go']['main']['App']['CheckForUpdate']();
+}
+
 export function CloseApp() {
   return window['go']['main']['App']['CloseApp']();
 }

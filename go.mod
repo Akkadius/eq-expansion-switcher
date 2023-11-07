@@ -3,9 +3,13 @@ module eq-expansion-switcher
 go 1.18
 
 require (
+	github.com/google/go-github/v41 v41.0.0
 	github.com/gosimple/slug v1.13.1
+	github.com/joho/godotenv v1.5.1
 	github.com/labstack/gommon v0.4.0
+	github.com/mattn/go-isatty v0.0.20
 	github.com/otiai10/copy v1.12.0
+	github.com/schollz/progressbar/v3 v3.14.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/wailsapp/wails/v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -14,6 +18,7 @@ require (
 require (
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
@@ -22,7 +27,7 @@ require (
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.6.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
@@ -35,7 +40,8 @@ require (
 	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 )
 

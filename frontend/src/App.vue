@@ -7,19 +7,17 @@
       id="main-window"
   >
     <div
-        class="hover-highlight-inner"
-        style="position: absolute; right: 50px; top: -8px; z-index: 999999; cursor: pointer;"
+        style="position: absolute; right: 50px; top: -8px; z-index: 999999; cursor: pointer; "
         @click="maximizeApp()"
     >
-      <i class="gg-maximize" style="--ggs: .7;"></i>
+      <i class="gg-maximize hover-highlight" style="--ggs: .7;"></i>
     </div>
 
     <div
-        class="hover-highlight-inner"
-        style="position: absolute; right: 20px; top: -12px; z-index: 999999; cursor: pointer;"
+        style="position: absolute; right: 20px; top: -12px; z-index: 999999; cursor: pointer; "
         @click="closeApp()"
     >
-      <i class="gg-close" style="--ggs: .7;"></i>
+      <i class="gg-close hover-highlight" style="--ggs: .7;"></i>
     </div>
 
     <app-initialize
@@ -41,9 +39,9 @@
 </style>
 
 <script>
-import EqWindow                           from "./components/eq-ui/EQWindow.vue";
-import {AppInitializationCheck, CloseApp} from "../wailsjs/go/main/App.js";
-import EqTabs                             from "./components/eq-ui/EQTabs.vue";
+import EqWindow                                           from "./components/eq-ui/EQWindow.vue";
+import {AppInitializationCheck, CheckForUpdate, CloseApp} from "../wailsjs/go/main/App.js";
+import EqTabs                                             from "./components/eq-ui/EQTabs.vue";
 import EqTab                              from "./components/eq-ui/EQTab.vue";
 import {WindowToggleMaximise}             from "../wailsjs/runtime/runtime.js";
 import AppInitialize                      from "@/components/AppInitialize.vue";
@@ -58,6 +56,8 @@ export default {
   },
   mounted() {
     this.checkAppInitialized()
+
+    CheckForUpdate()
   },
   methods: {
     async checkAppInitialized() {

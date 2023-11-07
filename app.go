@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"eq-expansion-switcher/internal/config"
+	"eq-expansion-switcher/internal/env"
 	"eq-expansion-switcher/internal/eqassets"
+	"eq-expansion-switcher/internal/updater"
 	"fmt"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"log"
@@ -12,19 +15,24 @@ import (
 	"strconv"
 )
 
+//go:embed package.json
+var packageJson []byte
+
 // App struct
 type App struct {
-	ctx    context.Context
-	assets *eqassets.EqAssets
-	config config.Config
+	ctx     context.Context
+	assets  *eqassets.EqAssets
+	config  config.Config
+	updater *updater.Service
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{
-		ctx:    context.Background(),
-		assets: eqassets.NewEqAssets(),
-		config: config.Get(),
+		ctx:     context.Background(),
+		assets:  eqassets.NewEqAssets(),
+		config:  config.Get(),
+		updater: updater.NewService(packageJson),
 	}
 }
 
@@ -78,26 +86,35 @@ func (a *App) GetConfig() config.Config {
 	return a.config
 }
 
-func (a *App) PatchFilesForExpansion(expansionId int) {
+func (a *App) PatchFilesForExpansion(expansionId int) error {
 	if !a.validateEqDirExists() {
-		return
+		return nil
 	}
 
-	a.assets.PatchFilesForExpansion(expansionId)
+	err := a.assets.PatchFilesForExpansion(expansionId)
+	if err != nil {
+		return err
+	}
 
 	_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 		Type:    runtime.InfoDialog,
 		Title:   "Patch",
 		Message: "Patch Complete!",
 	})
+	return nil
 }
 
-func (a *App) DumpPatchFilesForExpansion(expansionId int) {
+func (a *App) DumpPatchFilesForExpansion(expansionId int) error {
 	if !a.validateEqDirExists() {
-		return
+		return nil
 	}
 
-	a.assets.DumpPatchFilesForExpansion(expansionId)
+	err := a.assets.DumpPatchFilesForExpansion(expansionId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (a *App) CloseApp() {
@@ -155,6 +172,23 @@ func (a *App) AppInitialization() error {
 
 func (a *App) GetAssetBasepath() string {
 	return a.assets.Basepath()
+}
+
+func (a *App) CheckForUpdate() string {
+	if a.updater.IsUpdateAvailable() && !env.IsAppEnvDev() {
+		response, _ := runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.QuestionDialog,
+			Title:         "Update Available",
+			Message:       "There is an update available. Would you like to update now?",
+			DefaultButton: "Yes",
+		})
+
+		if response == "Yes" {
+
+		}
+	}
+
+	return ""
 }
 
 func (a *App) validateEqDirExists() bool {

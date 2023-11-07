@@ -123,24 +123,24 @@ func (e *EqAssets) GetExpansionFiles(expansionId string) []ExpansionFiles {
 		}
 	}
 
-	//fmt.Println(files)
+	fmt.Println(files)
 
 	return files
 }
 
-func (e *EqAssets) PatchFilesForExpansion(id int) {
+func (e *EqAssets) PatchFilesForExpansion(id int) error {
 	c := config.Get()
 
-	for _, e := range e.GetExpansionFiles(strconv.Itoa(id)) {
-		fmt.Println("Checking for files to be deleted in expansion:", e.Expansion.Name)
-		for _, f := range e.Files {
+	for _, file := range e.GetExpansionFiles(strconv.Itoa(id)) {
+		fmt.Println("Checking for files to be deleted in expansion:", file.Expansion.Name)
+		for _, f := range file.Files {
 			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
 				newFile := strings.Split(f, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
 				base := strings.Join(newFile, string(filepath.Separator))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
-				_ = filepath.Walk(c.EqDir, func(path string, info os.FileInfo, err error) error {
+				err := filepath.Walk(c.EqDir, func(path string, info os.FileInfo, err error) error {
 					if info == nil {
 						return nil
 					}
@@ -155,52 +155,57 @@ func (e *EqAssets) PatchFilesForExpansion(id int) {
 						// remove file
 						err := os.Remove(path)
 						if err != nil {
-							fmt.Println(err)
+							return err
 						}
 					}
 
 					return nil
 				})
+				if err != nil {
+					return err
+				}
 			}
 		}
 
-		fmt.Println("Patching files for expansion:", e.Expansion.Name)
-		for _, f := range e.Files {
+		fmt.Println("Patching files for expansion:", file.Expansion.Name)
+		for _, f := range file.Files {
 			newFile := strings.Split(f, string(filepath.Separator))
-			newFile = append(newFile[:0], newFile[2:]...)
 			destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+			destination = strings.ReplaceAll(destination, e.basepath, "")
 
 			fmt.Printf("--- Copying file %v to %v\n", f, destination)
 
 			// copy source to destination
 			err := cp.Copy(f, destination)
 			if err != nil {
-				fmt.Println(err)
+				return err
 			}
 		}
 	}
+
+	return nil
 }
 
-func (e *EqAssets) DumpPatchFilesForExpansion(id int) {
+func (e *EqAssets) DumpPatchFilesForExpansion(id int) error {
 	tmpdir := filepath.Join(os.TempDir(), "patch-dir", time.Now().Format("2006-01-02-15-04-05"))
 
 	err := os.MkdirAll(tmpdir, 0755)
 	if err != nil {
-		log.Info(err)
+		return err
 	}
 
-	for _, e := range e.GetExpansionFiles(strconv.Itoa(id)) {
-		fmt.Println("Checking for files to be deleted in expansion:", e.Expansion.Name)
-		for _, f := range e.Files {
+	for _, file := range e.GetExpansionFiles(strconv.Itoa(id)) {
+		fmt.Println("Checking for files to be deleted in expansion:", file.Expansion.Name)
+		for _, f := range file.Files {
 			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
 				newFile := strings.Split(f, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
 				base := strings.Join(newFile, string(filepath.Separator))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
-				_ = filepath.Walk(tmpdir, func(path string, info os.FileInfo, err error) error {
+				err = filepath.Walk(tmpdir, func(path string, info os.FileInfo, err error) error {
 					if info.IsDir() {
-						return nil
+						return err
 					}
 
 					if strings.Contains(path, base) && !strings.Contains(path, "maps") {
@@ -209,32 +214,40 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) {
 						// remove file
 						err := os.Remove(path)
 						if err != nil {
-							fmt.Println(err)
+							return err
 						}
 					}
 
 					return nil
 				})
+				if err != nil {
+					return err
+				}
 			}
 		}
 
-		fmt.Println("Patching files for expansion:", e.Expansion.Name)
-		for _, f := range e.Files {
+		fmt.Println("Patching files for expansion:", file.Expansion.Name)
+		for _, f := range file.Files {
 			newFile := strings.Split(f, string(filepath.Separator))
-			newFile = append(newFile[:0], newFile[2:]...)
 			destination := filepath.Join(tmpdir, strings.Join(newFile, string(filepath.Separator)))
+			destination = strings.ReplaceAll(destination, e.basepath, "")
 
 			fmt.Printf("--- Copying file %v to %v\n", f, destination)
 
 			// copy source to destination
 			err := cp.Copy(f, destination)
 			if err != nil {
-				fmt.Println(err)
+				return err
 			}
 		}
 	}
 
-	_ = open.Run(tmpdir)
+	err = open.Run(tmpdir)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (e *EqAssets) InitPatchFiles() error {

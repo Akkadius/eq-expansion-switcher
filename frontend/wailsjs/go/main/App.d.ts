@@ -8,6 +8,8 @@ export function AppInitialization():Promise<void>;
 
 export function AppInitializationCheck():Promise<main.AppInitializationCheck>;
 
+export function CheckForUpdate():Promise<string>;
+
 export function CloseApp():Promise<void>;
 
 export function DumpPatchFilesForExpansion(arg1:number):Promise<void>;
