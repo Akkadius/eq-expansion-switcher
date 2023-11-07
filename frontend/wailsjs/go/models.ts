@@ -89,3 +89,22 @@ export namespace main {
 
 }
 
+export namespace updater {
+	
+	export class EnvResponse {
+	    env: string;
+	    version: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new EnvResponse(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.env = source["env"];
+	        this.version = source["version"];
+	    }
+	}
+
+}
+

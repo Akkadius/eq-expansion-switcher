@@ -30,6 +30,10 @@ export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
 
+export function GetEnv() {
+  return window['go']['main']['App']['GetEnv']();
+}
+
 export function GetExpansionFiles(arg1) {
   return window['go']['main']['App']['GetExpansionFiles'](arg1);
 }
