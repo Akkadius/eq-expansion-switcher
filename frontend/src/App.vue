@@ -7,19 +7,19 @@
       id="main-window"
   >
     <div
-        class="hover-highlight"
-        style="position: absolute; right: 50px; top: -14px; z-index: 999999; font-size: 18px; cursor: pointer;"
+        class="hover-highlight-inner"
+        style="position: absolute; right: 50px; top: -8px; z-index: 999999; cursor: pointer;"
         @click="maximizeApp()"
     >
-      🗖
+      <i class="gg-maximize" style="--ggs: .7;"></i>
     </div>
 
     <div
-        class="hover-highlight"
-        style="position: absolute; right: 30px; top: -18px; z-index: 999999; font-size: 20px; cursor: pointer;"
+        class="hover-highlight-inner"
+        style="position: absolute; right: 20px; top: -12px; z-index: 999999; cursor: pointer;"
         @click="closeApp()"
     >
-      x
+      <i class="gg-close" style="--ggs: .7;"></i>
     </div>
 
     <app-initialize
