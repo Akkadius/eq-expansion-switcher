@@ -136,7 +136,14 @@ func (e *EqAssets) PatchFilesForExpansion(id int) error {
 		for _, f := range file.Files {
 			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
 				newFile := strings.Split(f, string(filepath.Separator))
+				// path build to temp dir
+				destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+				// strip basepath from destination
+				destination = strings.ReplaceAll(destination, e.basepath, "")
+				// strip two levels of folders from destination
+				newFile = strings.Split(destination, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
+
 				base := strings.Join(newFile, string(filepath.Separator))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
@@ -170,8 +177,13 @@ func (e *EqAssets) PatchFilesForExpansion(id int) error {
 		fmt.Println("Patching files for expansion:", file.Expansion.Name)
 		for _, f := range file.Files {
 			newFile := strings.Split(f, string(filepath.Separator))
+			// path build to temp dir
 			destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+			// strip basepath from destination
 			destination = strings.ReplaceAll(destination, e.basepath, "")
+			// strip two levels of folders from destination
+			newFile = strings.Split(destination, string(filepath.Separator))
+			newFile = append(newFile[:0], newFile[2:]...)
 
 			fmt.Printf("--- Copying file %v to %v\n", f, destination)
 
@@ -199,7 +211,14 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) error {
 		for _, f := range file.Files {
 			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
 				newFile := strings.Split(f, string(filepath.Separator))
+				// path build to temp dir
+				destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+				// strip basepath from destination
+				destination = strings.ReplaceAll(destination, e.basepath, "")
+				// strip two levels of folders from destination
+				newFile = strings.Split(destination, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
+				
 				base := strings.Join(newFile, string(filepath.Separator))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
@@ -229,8 +248,13 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) error {
 		fmt.Println("Patching files for expansion:", file.Expansion.Name)
 		for _, f := range file.Files {
 			newFile := strings.Split(f, string(filepath.Separator))
+			// path build to temp dir
 			destination := filepath.Join(tmpdir, strings.Join(newFile, string(filepath.Separator)))
+			// strip basepath from destination
 			destination = strings.ReplaceAll(destination, e.basepath, "")
+			// strip two levels of folders from destination
+			newFile = strings.Split(destination, string(filepath.Separator))
+			newFile = append(newFile[:0], newFile[2:]...)
 
 			fmt.Printf("--- Copying file %v to %v\n", f, destination)
 
