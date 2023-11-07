@@ -174,8 +174,14 @@ func (a *App) GetAssetBasepath() string {
 	return a.assets.Basepath()
 }
 
+func (a *App) GetEnv() updater.EnvResponse {
+	_, e := a.updater.GetAppVersion()
+
+	return e
+}
+
 func (a *App) CheckForUpdate() string {
-	if a.updater.IsUpdateAvailable() && !env.IsAppEnvDev() {
+	if !env.IsAppEnvDev() && a.updater.IsUpdateAvailable() {
 		response, _ := runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.QuestionDialog,
 			Title:         "Update Available",
@@ -184,7 +190,7 @@ func (a *App) CheckForUpdate() string {
 		})
 
 		if response == "Yes" {
-
+			a.updater.CheckForUpdates()
 		}
 	}
 

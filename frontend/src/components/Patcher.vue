@@ -1,7 +1,6 @@
 <template>
   <div class="row">
     <div class="col-4">
-      <h6>ProjectEQ Expansions Client <br>Switcher Utility</h6>
       <p>
         This utility will allow you to switch between ProjectEQ expansions
         without having to manually copy files around.

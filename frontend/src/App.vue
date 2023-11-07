@@ -2,7 +2,7 @@
   <eq-window
       style="margin: 10px 0 0; width: 100%; height: 99%;"
       :title-draggable="true"
-      title="ProjectEQ Expansions Client Switcher Utility"
+      :title="'ProjectEQ Expansions Client Switcher Utility (v' + version + ')'"
       class="main-window pb-0"
       id="main-window"
   >
@@ -40,7 +40,7 @@
 
 <script>
 import EqWindow                                           from "./components/eq-ui/EQWindow.vue";
-import {AppInitializationCheck, CheckForUpdate, CloseApp} from "../wailsjs/go/main/App.js";
+import {AppInitializationCheck, CheckForUpdate, CloseApp, GetEnv} from "../wailsjs/go/main/App.js";
 import EqTabs                                             from "./components/eq-ui/EQTabs.vue";
 import EqTab                              from "./components/eq-ui/EQTab.vue";
 import {WindowToggleMaximise}             from "../wailsjs/runtime/runtime.js";
@@ -52,12 +52,20 @@ export default {
   data() {
     return {
       isInitialized: false,
+      version: "0.0.0",
     }
   },
-  mounted() {
-    this.checkAppInitialized()
+  async mounted() {
+    await CheckForUpdate()
 
-    CheckForUpdate()
+    await this.checkAppInitialized()
+
+    const r = await GetEnv()
+    if (r) {
+      this.version = r.version
+    }
+
+
   },
   methods: {
     async checkAppInitialized() {

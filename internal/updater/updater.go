@@ -49,8 +49,8 @@ type PackageJson struct {
 	} `json:"repository"`
 }
 
-// getAppVersion gets the app version from the package.json embedded in the binary
-func (s Service) getAppVersion() (error, EnvResponse) {
+// GetAppVersion gets the app version from the package.json embedded in the binary
+func (s Service) GetAppVersion() (error, EnvResponse) {
 	var pkg PackageJson
 	err := json.Unmarshal(s.packageJson, &pkg)
 	if err != nil {
@@ -114,7 +114,7 @@ func (s Service) IsUpdateAvailable() bool {
 	}
 
 	// get app version
-	err, e := s.getAppVersion()
+	err, e := s.GetAppVersion()
 	if err != nil {
 		log.Println(err)
 	}
@@ -177,7 +177,7 @@ func (s Service) CheckForUpdates() {
 	}
 
 	// get app version
-	err, e := s.getAppVersion()
+	err, e := s.GetAppVersion()
 	if err != nil {
 		log.Println(err)
 	}
