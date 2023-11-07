@@ -211,7 +211,7 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) error {
 				newFile := strings.Split(file, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
 				// path build to temp
-				base := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+				base := filepath.Join(tmpdir, strings.Join(newFile, string(filepath.Separator)))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
 				err = filepath.Walk(tmpdir, func(path string, info os.FileInfo, err error) error {
