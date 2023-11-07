@@ -62,8 +62,8 @@ help: ##@other Show this help.
 ci-build: ##@ci-build Builds and releases
 	wails build -platform=windows/amd64
 	@echo "Zipping binary"
-	cp ./build/bin/eq-expansion-switcher.exe ./build/bin/ProjectEQ Expansion Switcher.exe
-	zip -r -j ./eq-expansion-switcher-windows-amd64.zip ./build/bin/ProjectEQ Expansion Switcher.exe
+	cp ./build/bin/eq-expansion-switcher.exe "./build/bin/ProjectEQ Expansion Switcher.exe"
+	zip -r -j ./eq-expansion-switcher-windows-amd64.zip "./build/bin/ProjectEQ Expansion Switcher.exe"
 	gh-release --assets=eq-expansion-switcher-windows-amd64.zip -y
 
 #----------------------
