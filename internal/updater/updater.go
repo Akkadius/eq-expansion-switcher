@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
@@ -63,10 +64,11 @@ func (s Service) getAppVersion() (error, EnvResponse) {
 }
 
 const (
-	appFileName = "eq-expansion-switcher"
-	appName     = "ProjectEQ Expansion Switcher"
-	org         = "Akkadius"
-	repo        = "eq-expansion-switcher"
+	appFileName       = "eq-expansion-switcher"
+	appExecutableName = "ProjectEQ Expansion Switcher"
+	appName           = "ProjectEQ Expansion Switcher"
+	org               = "Akkadius"
+	repo              = "eq-expansion-switcher"
 )
 
 func (s Service) IsUpdateAvailable() bool {
@@ -196,7 +198,7 @@ func (s Service) CheckForUpdates() {
 		assetName := *asset.Name
 		downloadUrl := *asset.BrowserDownloadURL
 		targetFileNameZipped := fmt.Sprintf("%s-%s-%s.zip", appFileName, runtime.GOOS, runtime.GOARCH)
-		targetFileName := fmt.Sprintf("%s-%s-%s", appFileName, runtime.GOOS, runtime.GOARCH)
+		// targetFileName := fmt.Sprintf("%s-%s-%s", appFileName, runtime.GOOS, runtime.GOARCH)
 
 		debug(fmt.Sprintf("[Update] Looping assets assetName [%v] targetFileNameZipped [%v]\n", assetName, targetFileNameZipped))
 
@@ -229,9 +231,24 @@ func (s Service) CheckForUpdates() {
 			}
 
 			// relink
-			tempFile := filepath.Join(os.TempDir(), targetFileName)
-			newExecutable := filepath.Join(executablePath, executableName)
-			err = moveFile(tempFile, newExecutable)
+			tempFile := filepath.Join(os.TempDir(), appExecutableName)
+
+			newAppExecutableName := appExecutableName
+			if runtime.GOOS == "windows" {
+				newAppExecutableName = appExecutableName + ".exe"
+			}
+			newExecutable := filepath.Join(executablePath, newAppExecutableName)
+
+			newExecutableTemp, err := exec.LookPath(tempFile)
+			if err != nil {
+				log.Println(err)
+			}
+
+			fmt.Println("tempFile " + tempFile)
+			fmt.Println("newExecutableTemp " + newExecutableTemp)
+			fmt.Println("newExecutable " + newExecutable)
+
+			err = moveFile(newExecutableTemp, newExecutable)
 			if err != nil {
 				log.Println(err)
 			}
