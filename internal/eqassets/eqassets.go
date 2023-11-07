@@ -211,14 +211,12 @@ func (e *EqAssets) DumpPatchFilesForExpansion(id int) error {
 		for _, f := range file.Files {
 			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
 				newFile := strings.Split(f, string(filepath.Separator))
-				// path build to temp dir
-				destination := filepath.Join(c.EqDir, strings.Join(newFile, string(filepath.Separator)))
+				destination := filepath.Join(strings.Join(newFile, string(filepath.Separator)))
 				// strip basepath from destination
 				destination = strings.ReplaceAll(destination, e.basepath, "")
 				// strip two levels of folders from destination
 				newFile = strings.Split(destination, string(filepath.Separator))
 				newFile = append(newFile[:0], newFile[2:]...)
-				
 				base := strings.Join(newFile, string(filepath.Separator))
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
