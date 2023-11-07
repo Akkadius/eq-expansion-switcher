@@ -2,14 +2,19 @@
   <div
       class="row justify-content-center"
   >
-    <div style="top: 30%; position: absolute">
+    <div
+        style="top: 30%; position: absolute"
+    >
       <eq-window>
         <div>
           By using this program you agree that you own a legal copy of EverQuest and will not use this program to
           distribute files to others.
         </div>
 
-        <div class="mt-3" style="left: 45%; position: relative" v-if="!installing">
+        <div
+            class="mt-3 justify-content-center"
+            v-if="!installing"
+        >
           <button
               class='eq-button'
               @click="initialize()"

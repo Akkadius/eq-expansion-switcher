@@ -47,7 +47,7 @@ import EqTabs                             from "./components/eq-ui/EQTabs.vue";
 import EqTab                              from "./components/eq-ui/EQTab.vue";
 import {WindowToggleMaximise}             from "../wailsjs/runtime/runtime.js";
 import AppInitialize                      from "@/components/AppInitialize.vue";
-import Patcher                            from "@/Patcher.vue";
+import Patcher                            from "@/components/Patcher.vue";
 
 export default {
   components: { Patcher, AppInitialize, EqTab, EqTabs, EqWindow },

@@ -1,15 +1,21 @@
 {
 	"fixed": {
-		"file_version": "{{.Info.ProductVersion}}"
+		"file_version": "1.0"
 	},
 	"info": {
 		"0000": {
-			"ProductVersion": "{{.Info.ProductVersion}}",
-			"CompanyName": "{{.Info.CompanyName}}",
-			"FileDescription": "{{.Info.ProductName}}",
-			"LegalCopyright": "{{.Info.Copyright}}",
-			"ProductName": "{{.Info.ProductName}}",
-			"Comments": "{{.Info.Comments}}"
+			"Comments": "ProjectEQ EverQuest client expansion switcher",
+			"CompanyName": "Akkadius",
+			"FileDescription": "ProjectEQ EverQuest client expansion switcher",
+			"FileVersion": "1.0",
+			"InternalName": "ProjectEQ EverQuest client expansion switcher",
+			"LegalCopyright": "ProjectEQ",
+			"LegalTrademarks": "ProjectEQ",
+			"OriginalFilename": "",
+			"PrivateBuild": "",
+			"ProductName": "ProjectEQ EverQuest client expansion switcher",
+			"ProductVersion": "1.0",
+			"SpecialBuild": ""
 		}
 	}
 }

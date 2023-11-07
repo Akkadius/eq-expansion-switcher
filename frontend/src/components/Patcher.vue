@@ -135,7 +135,7 @@
 
 <script>
 import {defineComponent} from 'vue'
-import {EXPANSIONS_FULL} from "@/expansions/eq-expansions";
+import {EXPANSIONS_FULL} from "@/expansions/eq-expansions.ts";
 import {
   DumpPatchFilesForExpansion,
   GetAssetBasepath,
@@ -143,8 +143,8 @@ import {
   GetExpansionFiles,
   OpenFileDialogueEqDir,
   PatchFilesForExpansion
-}                        from "../wailsjs/go/main/App";
-import useAssets         from "@/assets/assets";
+}                        from "../../wailsjs/go/main/App.js";
+import useAssets         from "@/assets/assets.js";
 import EqTab             from "@/components/eq-ui/EQTab.vue";
 import EqTabs            from "@/components/eq-ui/EQTabs.vue";
 import EqWindow          from "@/components/eq-ui/EQWindow.vue";
