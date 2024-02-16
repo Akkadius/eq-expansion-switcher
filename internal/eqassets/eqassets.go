@@ -278,7 +278,7 @@ func (e *EqAssets) InitPatchFiles() error {
 
 	// download https://github.com/Akkadius/eq-expansion-switcher/releases/download/v1.0.0/files.zip
 	// unzip to e.assets.Basepath()
-	resp, err := http.Get("https://github.com/Akkadius/eq-expansion-switcher/releases/download/v1.0.0/files.zip")
+	resp, err := http.Get("https://github.com/Akkadius/eq-expansion-switcher/releases/download/v1.0.0/files-v1.0.9.zip")
 	if err != nil {
 		return err
 	}
