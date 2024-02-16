@@ -1,3 +1,7 @@
+## [1.0.9] 11/15/2023
+
+* Fix issue with `.zon` files not being deleted in sequence before applying current expansion files
+
 ## [1.0.8] 11/7/2023
 
 * Automatic updates for Windows

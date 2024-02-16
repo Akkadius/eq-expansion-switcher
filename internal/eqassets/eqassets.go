@@ -134,7 +134,10 @@ func (e *EqAssets) PatchFilesForExpansion(id int) error {
 	for _, file := range e.GetExpansionFiles(strconv.Itoa(id)) {
 		fmt.Println("Checking for files to be deleted in expansion:", file.Expansion.Name)
 		for _, f := range file.Files {
-			if strings.Contains(f, ".s3d") || strings.Contains(f, ".eqg") {
+			isZoneExtension := strings.Contains(f, ".s3d") ||
+				strings.Contains(f, ".eqg") ||
+				strings.Contains(f, ".zon")
+			if isZoneExtension {
 				file := strings.ReplaceAll(f, e.basepath+string(filepath.Separator), "")
 				// strip two folder levels
 				newFile := strings.Split(file, string(filepath.Separator))
@@ -145,6 +148,8 @@ func (e *EqAssets) PatchFilesForExpansion(id int) error {
 				// strip extensions for matching
 				base = strings.ReplaceAll(base, ".s3d", "")
 				base = strings.ReplaceAll(base, ".eqg", "")
+				base = strings.ReplaceAll(base, ".zon", "")
+
 				err := filepath.Walk(c.EqDir, func(path string, info os.FileInfo, err error) error {
 					if info == nil {
 						return nil
@@ -154,7 +159,11 @@ func (e *EqAssets) PatchFilesForExpansion(id int) error {
 						return nil
 					}
 
-					if strings.Contains(path, base) && !strings.Contains(path, "maps") {
+					// we do this to make sure we're not case sensitive since some file naming for zones
+					// are not consistent
+					lowerPath := strings.ToLower(path)
+					lowerBase := strings.ToLower(base)
+					if strings.Contains(lowerPath, lowerBase) && !strings.Contains(path, "maps") {
 						fmt.Println("--- Removing file:", path)
 
 						// remove file
